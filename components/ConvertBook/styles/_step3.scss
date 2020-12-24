@@ -1,0 +1,43 @@
+.step3 {
+  .box-introduct {
+    .box-introduct__main {
+      p {
+        font-size: 95%;
+        margin-bottom: 3px;
+      }
+    }
+    .box-introduct__footer {
+      .embed-responsive {
+        width: 80%;
+        margin: auto;
+      }
+    }
+  }
+  .box-step3 {
+    .box-step3__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .title-step3 {
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        h5 {
+          font-weight: 400;
+          font-size: 100%;
+          margin: 0;
+        }
+      }
+      svg {
+        width: 40px;
+      }
+    }
+    // .box-step3__main {
+    // }
+    .box-step3__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+.analysic-book {
+  padding: 0 10px;
+  .analysic-book__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include Responsive(XS) {
+      display: block;
+    }
+    @include mobile-xs {
+      display: block;
+    }
+    .title {
+      @include Responsive(XS) {
+        text-align: center;
+      }
+      @include mobile-xs {
+        text-align: center;
+      }
+    }
+    .options {
+      @include Responsive(XS) {
+        text-align: center;
+      }
+      @include mobile-xs {
+        text-align: center;
+      }
+      .input-search {
+        width: 350px;
+      }
+      .search {
+        background-color: #3c4858;
+        color: #fff;
+        // @include Responsive(XS) {
+        //   margin-top: 5px;
+        // }
+        // @include mobile-xs {
+        //   margin-top: 5px;
+        // }
+      }
+    }
+  }
+  .analysic-book__index {
+    padding: 0 10px;
+    .analysic-book__main {
+      margin-top: 20px;
+      .el-table__row {
+        .cell {
+          .el-button {
+            margin: 0px;
+            &.is-circle {
+              padding: 5px;
+            }
+          }
+        }
+      }
+      .el-scrollbar__bar.is-horizontal {
+        display: none !important;
+      }
+    }
+    .analysic-book__footer {
+      padding: 10px 0px;
+    }
+  }
+  .el-dialog__wrapper {
+    .el-date-editor {
+      width: 100% !important;
+    }
+  }
+}

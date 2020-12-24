@@ -1,0 +1,33 @@
+.box_list_bank{
+  .list_bank{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    .box-img{
+      display: flex;
+      align-items: center;
+      .img{
+        position: relative;
+        padding: 5px;
+        img{
+          max-width: 100%;
+          border: 1px solid #c4c4c4;
+        }
+        img.active{
+          border: 1px solid red;
+        }
+        i{
+          position: absolute;
+          right: 7px;
+          top: 5px;
+          color: #5daf34;
+          font-weight: bold;
+          display: none;
+        }
+        i.active{
+          display: block;
+        }
+      }
+    }
+  }
+}

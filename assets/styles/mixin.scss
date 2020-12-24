@@ -1,0 +1,51 @@
+$XS:     480px;   
+$SM:     768px;  
+$MD:    1024px;   
+$XL:   1170px;
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin mobile-xs { @media (max-width: #{$XS - 1px}) {     
+  @content;   
+ } 
+}
+@mixin Responsive($canvas) {
+  @if $canvas == XS {
+   @media only screen and (min-width: $XS) and (max-width: $SM) { @content; } 
+  }
+  @else if $canvas == SM {
+   @media only screen and (min-width: $SM) and (max-width: $MD) { @content; } 
+  }
+  @else if $canvas == MD {
+   @media only screen and (min-width: $MD) and (max-width: $XL) { @content; } 
+  }
+  @else if $canvas == XL {
+   @media only screen and (min-width: $XL) { @content; } 
+  }
+}

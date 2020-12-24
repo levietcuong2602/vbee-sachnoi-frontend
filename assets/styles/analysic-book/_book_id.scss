@@ -1,0 +1,19 @@
+.book-detail {
+  padding: 20px 10px;
+  .book-detail__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .book-detail__main {
+    padding: 10px;
+    .el-table__row {
+      .el-button {
+        margin: 0px;
+        &.is-circle {
+          padding: 5px;
+        }
+      }
+    }
+  }
+}
