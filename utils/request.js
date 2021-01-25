@@ -1,16 +1,18 @@
 import axios from "axios";
-import { Message } from "element-ui";
-import { getToken, setToken } from "@/utils/auth";
+import { getToken } from "@/utils/auth";
+import $store from "~/store";
+
+console.log({ authent: $store.getters });
 
 // Create axios instance
 const service = axios.create({
   baseURL: process.env.baseUrl,
-  timeout: 120000 // Request timeout
+  timeout: 120000, // Request timeout
 });
 
 // request拦截器
 service.interceptors.request.use(
-  config => {
+  (config) => {
     const token = getToken();
     if (token) {
       config.headers["Authorization"] = "Bearer " + getToken(); // Set JWT token
@@ -18,7 +20,7 @@ service.interceptors.request.use(
 
     return config;
   },
-  error => {
+  (error) => {
     // Do something with request error
     console.log(error); // for debug
     Promise.reject(error);
@@ -27,15 +29,10 @@ service.interceptors.request.use(
 
 // response pre-processing
 service.interceptors.response.use(
-  response => {
-    if (response.headers.authorization) {
-      setToken(response.headers.authorization);
-      response.data.token = response.headers.authorization;
-    }
-
+  (response) => {
     return response.data;
   },
-  error => {
+  (error) => {
     console.log("err" + error); // for debug
     if (error.message === "timeout of 10000ms exceeded") {
       error.message =
@@ -48,12 +45,6 @@ service.interceptors.response.use(
       error.message = "Đường dẫn không tồn tại !";
     }
 
-    // Message({
-    //   message: error.message,
-    //   type: "error",
-    //   duration: 5 * 1000,
-    //   offset: 40
-    // });
     return Promise.reject(error);
   }
 );

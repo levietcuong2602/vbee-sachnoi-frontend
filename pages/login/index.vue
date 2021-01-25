@@ -5,25 +5,33 @@
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
           <div class="box-title">
-            <h5 class="box-title__header text-center">Đăng nhập và trải nghiệm</h5>
+            <h5 class="box-title__header text-center">
+              Đăng nhập và trải nghiệm
+            </h5>
           </div>
           <div class="box-main">
             <i
               class="text-danger"
               v-if="errors.isErrorCaptcha || errors.isErrorOther"
-            >{{ errors.message }}</i>
-            <el-form :rules="loginRules" :model="loginForm" ref="loginForm">
-              <el-form-item prop="userName" class="box-main__item">
+              >{{ errors.message }}</i
+            >
+            <el-form
+              :rules="loginRules"
+              :model="loginForm"
+              ref="loginForm"
+              required
+            >
+              <el-form-item prop="username" class="box-main__item">
                 <span class="svg-container">
                   <svg-icon icon-class="user" />
                 </span>
                 <el-input
                   placeholder="Tên đăng nhập"
-                  name="userName"
+                  name="username"
                   type="text"
                   tabindex="1"
                   auto-complete="on"
-                  v-model="loginForm.userName"
+                  v-model="loginForm.username"
                 />
               </el-form-item>
 
@@ -38,9 +46,14 @@
                   tabindex="1"
                   auto-complete="on"
                   v-model="loginForm.password"
+                  ref="password"
                 />
                 <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                  <svg-icon
+                    :icon-class="
+                      passwordType === 'password' ? 'eye' : 'eye-open'
+                    "
+                  />
                 </span>
               </el-form-item>
 
@@ -73,10 +86,12 @@
               </el-form-item>
             </el-form>
             <div class="btn-login">
-              <el-button type="primary" @click="handleLogin">Đăng nhập</el-button>
+              <el-button type="primary" @click="handleLogin"
+                >Đăng nhập</el-button
+              >
             </div>
             <div class="tips">
-              <span style="margin-right:20px;">
+              <span style="margin-right: 20px">
                 <i>Chưa có tài khoản?</i>
               </span>
               <a href="/register">
@@ -85,7 +100,9 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12 d-none d-sm-block d-block">
+        <div
+          class="col-lg-6 col-md-6 col-sm-12 col-12 d-none d-sm-block d-block"
+        >
           <img src="/img/robo.png" alt />
         </div>
       </div>
@@ -94,23 +111,23 @@
 </template>
 
 <script>
-import { setToken } from "@/utils/auth";
+import { mapState } from "vuex";
 
+import { setToken } from "@/utils/auth";
 import { generateCaptcha } from "@/api/captcha";
 import { login } from "@/api/authen";
 
+import { STATUS_CODE } from "@/constant";
 import Navbar from "@/layouts/components/Splash/Navbar";
-import { mapState } from "vuex";
 
 export default {
   name: "Login",
-  computed: {
-    ...mapState("auth", ["loggedIn", "user"])
-  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("Tên đăng nhập không được bỏ trống"));
+      } else {
+        callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
@@ -124,53 +141,53 @@ export default {
     };
     return {
       loginForm: {
-        userName: "vietcuong97",
-        password: "vietcuong123",
-        captchaInput: ""
+        username: "vietcuong97",
+        password: "vietcuong97",
+        captchaInput: "",
       },
       loginRules: {
-        userName: [
-          { required: true, trigger: "blur", validator: validateUsername }
+        username: [
+          { required: true, trigger: "blur", validator: validateUsername },
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          { required: true, trigger: "blur", validator: validatePassword },
         ],
         captchaInput: [
           {
             required: true,
             trigger: "blur",
-            message: "Captcha không được bỏ trống"
-          }
-        ]
+            message: "Captcha không được bỏ trống",
+          },
+        ],
       },
       loading: false,
       passwordType: "password",
       redirect: undefined,
       captcha: {
         captchaSvg: null,
-        session: null
+        session: null,
       },
       errors: {
         isErrorCaptcha: false,
         isErrorOther: false,
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   components: {
-    Navbar
+    Navbar,
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         const query = route.query;
         if (query) {
           this.redirect = query.redirect;
           this.otherQuery = this.getOtherQuery(query);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   layout() {
     return "splash";
@@ -187,51 +204,47 @@ export default {
       });
     },
     async handleLogin() {
-      try {
-        this.$refs.loginForm.validate();
-        const { status, result, message, code } = await login({
-          userName: this.loginForm.userName,
-          password: this.loginForm.password,
-          captcha: this.loginForm.captchaInput,
-          session: this.captcha.session
-        });
-        if (status === 1) {
-          // redrect to pages
-          const { access_token } = result;
-          setToken(access_token);
-          // set store then will set store
-          this.$store.dispatch("user/setToken", access_token);
-          this.$auth.setUserToken(access_token);
-          // redirect to home
-          this.$router.push("/");
-          return;
-        }
-        this.getCaptcha();
-        this.loginForm.captchaInput = "";
-        if (code === 20) {
-          this.errors.isErrorCaptcha = true;
-          this.errors.message = message;
-          this.loginForm.captchaInput = "";
-          return;
-        }
-        this.errors.isErrorOther = true;
-        this.errors.message = message;
+      this.$refs["loginForm"].validate(async (valid, obj) => {
+        if (valid) {
+          try {
+            const body = {
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+              captcha: this.loginForm.captchaInput,
+              session: this.captcha.session,
+            };
+            const { status, result, message } = await login(body);
+            // Login success
+            if (status === 1) {
+              await this.$auth.setToken(
+                "local",
+                "Bearer " + result.access_token
+              );
+              this.$store.dispatch("auth/setAuthenticated", true);
+              this.$router.push("/convert-book");
+              console.log("redirect home");
 
-        // this.$store
-        //   .dispatch("user/login", {
-        //     userName: this.loginForm.userName,
-        //     password: this.loginForm.password,
-        //     captcha: this.loginForm.captchaInput,
-        //     session: this.captcha.session
-        //   })
-        //   .then(() => {
-        //     this.$router.push({ path: this.redirect || "/" });
-        //     this.loading = false;
-        //   })
-        //   .catch(() => {
-        //     this.loading = false;
-        //   });
-      } catch (error) {}
+              // reset error
+              this.errors.isErrorCaptcha = false;
+              this.errors.message = "";
+              this.loginForm.captchaInput = "";
+            } else if (status === STATUS_CODE.CAPTCHA_INVALID) {
+              this.errors.isErrorCaptcha = true;
+              this.errors.message = message;
+              this.loginForm.captchaInput = "";
+            } else {
+              this.errors.isErrorOther = true;
+              this.errors.message = message;
+            }
+          } catch (error) {
+            console.log("1:", error.message);
+            this.$notify({
+              type: "error",
+              message: error.message,
+            });
+          }
+        }
+      });
     },
     async getCaptcha() {
       const { status, result } = await generateCaptcha();
@@ -248,11 +261,11 @@ export default {
         }
         return acc;
       }, {});
-    }
+    },
   },
   async mounted() {
     await this.getCaptcha();
-  }
+  },
 };
 </script>
 

@@ -252,10 +252,19 @@
           </template>
         </div>
       </div>
-      <Step1Component v-if="currentStep === 1" @handleNextStep="handleChangeStep" />
-      <Step2Component v-else-if="currentStep === 2" @handleNextStep="handleChangeStep" />
+      <Step1Component
+        v-if="currentStep === 1"
+        @handleNextStep="handleChangeStep"
+      />
+      <Step2Component
+        v-else-if="currentStep === 2"
+        @handleNextStep="handleChangeStep"
+      />
       <!-- <Step3Component v-else-if="currentStep === 3" @handleNextStep="handleChangeStep" /> -->
-      <Step4Component v-else-if="currentStep === 3" @handleNextStep="handleChangeStep" />
+      <Step4Component
+        v-else-if="currentStep === 3"
+        @handleNextStep="handleChangeStep"
+      />
     </div>
   </div>
 </template>
@@ -274,18 +283,18 @@ export default {
     Step1Component,
     Step2Component,
     Step3Component,
-    Step4Component
+    Step4Component,
   },
   computed: { ...mapGetters(["isEditing", "book"]) },
   data() {
     return {
-      currentStep: 1
+      currentStep: 1,
     };
   },
   watch: {
-    currentStep: function(step) {
+    currentStep: function (step) {
       this.$router.push({ query: { step } });
-    }
+    },
   },
   methods: {
     handleChangeStep(step) {
@@ -299,7 +308,7 @@ export default {
       if (!this.isEditing) return;
       event.preventDefault();
       event.returnValue = "";
-    }
+    },
   },
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);
@@ -315,7 +324,10 @@ export default {
     } else {
       this.currentStep = parseInt(step);
     }
-  }
+  },
+  mounted() {
+    console.log({ authen: this.$store.getters.isAuthenticated });
+  },
 };
 </script>
 <style lang="scss">

@@ -4,7 +4,7 @@ export const STATUS_SENTENCE = {
   SUCCESS: "success",
   PROCESSING: "processing",
   WAITING: "waiting",
-  ERROR: "error"
+  ERROR: "error",
 };
 
 export const STATUS_BOOK = {
@@ -12,7 +12,7 @@ export const STATUS_BOOK = {
   WAITING: "waiting",
   PROCESSING: "processing",
   DONE: "done",
-  ERROR: "error"
+  ERROR: "error",
 };
 
 export const STATUS_CHAPTER = {
@@ -20,5 +20,9 @@ export const STATUS_CHAPTER = {
   WAITING: "waiting",
   PROCESSING: "processing",
   DONE: "done",
-  ERROR: "error"
+  ERROR: "error",
+};
+
+export const STATUS_CODE = {
+  CAPTCHA_INVALID: 20,
 };

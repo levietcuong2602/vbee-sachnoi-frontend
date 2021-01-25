@@ -15,53 +15,52 @@ module.exports = {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || ""
-      }
+        content: process.env.npm_package_description || "",
+      },
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/img/headphones.svg" },
       {
         rel: "stylesheet",
-        href: "https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        href: "https://use.fontawesome.com/releases/v5.7.2/css/all.css",
       },
       {
         rel: "stylesheet",
         type: "text/css",
         href:
-          "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-      }
+          "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css",
+      },
     ],
     script: [
       {
         src:
-          "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+          "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js",
       },
       { src: "https://code.jquery.com/jquery-3.3.1.slim.min.js" },
       {
         src:
-          "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-      }
-    ]
+          "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js",
+      },
+    ],
   },
   env: {
-    baseUrl:
-      process.env.NODE_ENV === "production"
-        ? process.env.VUE_APP_BASE_URL
-        : "http://localhost:8888"
+    baseUrl: process.env.DOMAIN_BACKEND
+      ? process.env.DOMAIN_BACKEND
+      : "http://localhost:8080",
   },
   /*
    ** Customize the progress-bar color
    */
   loading: { color: "#fff" },
   router: {
-    middleware: "before-router",
+    // middleware: ["auth"],
     extendRoutes(routes, resolve) {
       routes.push({
         name: "custom",
         path: "*",
-        component: resolve(__dirname, "pages/404.vue")
+        component: resolve(__dirname, "pages/404.vue"),
       });
-    }
+    },
   },
   /*
    ** Global CSS
@@ -77,8 +76,8 @@ module.exports = {
     "@/plugins/performance-nuxt.js",
     {
       src: "~/plugins/highcharts.js",
-      ssr: true
-    }
+      ssr: true,
+    },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -89,43 +88,54 @@ module.exports = {
    */
   modules: ["@nuxtjs/axios", "@nuxtjs/auth"],
   /**
-   * Authen
+   * Axios configuration
    */
+  axios: {
+    baseURL: `${process.env.DOMAIN_BACKEND}/api/v1`, // Used as fallback if no runtime config is provided
+    proxyHeaders: false,
+    credentials: false,
+  },
   auth: {
     strategies: {
       local: {
+        token: {
+          property: "access_token",
+          property: "token",
+          // required: true,
+          type: "Bearer",
+          maxAge: 1800,
+        },
+        // refreshToken: {
+        //   property: "refresh_token",
+        //   maxAge: 60 * 60 * 24 * 30,
+        // },
         endpoints: {
           login: {
             url: "/auth/login",
-            method: "POST",
-            propertyName: "token"
+            method: "post",
+            propertyName: "access",
           },
           logout: {
             url: "/auth/logout",
-            method: "POST"
+            method: "post",
+            propertyName: "access",
           },
-          user: false
+          // user: {
+          //   url: "/auth/verify-token",
+          //   method: "post",
+          //   propertyName: "users",
+          // },
+          tokenRequired: false,
+          logout: false,
         },
-        tokenRequired: true,
-        tokenType: false
       },
       watchLoggedIn: true,
       redirect: {
         login: "/login",
-        logout: "/login",
-        callback: "/login",
-        home: "/"
+        logout: "/",
+        home: "/",
       },
-      cookie: false,
-      localStorage: false,
-      token: {
-        prefix: "token."
-      }
-    }
-  },
-  axios: {
-    baseURL: `${process.env.VUE_APP_BASE_URL}/api/v1`,
-    credentials: true
+    },
   },
   /*
    ** Build configuration
@@ -136,7 +146,9 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {
-      const svgRule = config.module.rules.find(rule => rule.test.test(".svg"));
+      const svgRule = config.module.rules.find((rule) =>
+        rule.test.test(".svg")
+      );
       svgRule.exclude = [resolve(__dirname, "assets/icons/svg")];
 
       //添加loader规则
@@ -144,9 +156,9 @@ module.exports = {
         test: /\.svg$/, //匹配.svg
         include: [resolve(__dirname, "assets/icons/svg")], //将存放svg的目录加入到loader处理目录
         use: [
-          { loader: "svg-sprite-loader", options: { symbolId: "icon-[name]" } }
-        ]
+          { loader: "svg-sprite-loader", options: { symbolId: "icon-[name]" } },
+        ],
       });
-    }
-  }
+    },
+  },
 };

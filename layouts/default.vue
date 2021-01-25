@@ -1,8 +1,12 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+    <div
+      v-if="device === 'mobile' && sidebar.opened"
+      class="drawer-bg"
+      @click="handleClickOutside"
+    />
     <sidebar class="sidebar-container" />
-    <div :class="{'fixed-header':fixedHeader}">
+    <div :class="{ 'fixed-header': fixedHeader }">
       <navbar />
     </div>
     <div class="main-container">
@@ -22,7 +26,7 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
   },
   mixins: [ResizeMixin],
   computed: {
@@ -40,15 +44,15 @@ export default {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile"
+        mobile: this.device === "mobile",
       };
-    }
+    },
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
-    }
-  }
+    },
+  },
 };
 </script>
 

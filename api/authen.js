@@ -5,7 +5,7 @@ export async function register(params) {
     type: "POST",
     method: "POST",
     url: "/api/v1/auth/register",
-    data: params
+    data: params,
   });
 }
 
@@ -14,7 +14,7 @@ export async function login(params) {
     type: "POST",
     method: "POST",
     url: "/api/v1/auth/login",
-    data: params
+    data: params,
   });
 }
 
@@ -22,7 +22,7 @@ export async function getUserInfo() {
   return await request({
     method: "GET",
     type: "GET",
-    url: "/api/v1/auth/user"
+    url: "/api/v1/auth/user",
   });
 }
 
@@ -31,7 +31,7 @@ export async function updateUser(data) {
     method: "POST",
     type: "POST",
     url: "/api/v1/auth/user",
-    data
+    data,
   });
 }
 
@@ -42,11 +42,19 @@ export async function changePassword({ passwordOld, passwordNew }) {
     url: "/api/v1/auth/password",
     data: {
       password_old: passwordOld,
-      password_new: passwordNew
-    }
+      password_new: passwordNew,
+    },
   });
 }
 
 export async function logout() {
   return await request({});
+}
+
+export async function verifyToken() {
+  return await request({
+    type: "POST",
+    method: "POST",
+    url: "api/v1/auth/verify-token",
+  });
 }

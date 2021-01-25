@@ -1,5 +1,3 @@
-import { stringLiteral } from "@babel/types";
-
 export function changeToSlug(title = "vbee", replace = "_") {
   var slug = "";
   var titleLower = title.toLowerCase();
@@ -35,29 +33,6 @@ export function convertDate(inputFormat, format = "DD/MM/YYYY") {
   } else if (format === "YYYY-MM-DD") {
     return [pad(d.getFullYear()), pad(d.getMonth() + 1), d.getDate()].join("-");
   }
-}
-
-export function getMoneyByCharacters(characters) {
-  characters = Number(characters);
-  let totalMoney = 0;
-  if (characters <= 1000000) {
-    totalMoney = (characters / 10) * 3;
-  } else if (characters > 1000000 && characters <= 10000000) {
-    totalMoney = (characters / 10) * 2.9;
-  } else if (characters > 10000000 && characters <= 20000000) {
-    totalMoney = (characters / 10) * 2.8;
-  } else if (characters > 20000000 && characters <= 50000000) {
-    totalMoney = (characters / 10) * 2.7;
-  } else if (characters > 50000000 && characters <= 100000000) {
-    totalMoney = (characters / 10) * 2.5;
-  } else if (characters > 100000000 && characters <= 200000000) {
-    totalMoney = (characters / 10) * 2.3;
-  } else if (characters > 200000000 && characters <= 500000000) {
-    totalMoney = (characters / 10) * 2;
-  } else if (characters > 500000000) {
-    totalMoney = (characters / 10) * 1.7;
-  }
-  return totalMoney;
 }
 
 export function getTotalCharacters(text) {
